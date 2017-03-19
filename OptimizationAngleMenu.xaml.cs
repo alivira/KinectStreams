@@ -79,7 +79,7 @@ namespace KinectStreams
             }
             else
             {
-                this.Close();
+                this.Hide();
             }
         }
 
