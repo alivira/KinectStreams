@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace KinectStreams
 {
@@ -49,6 +50,13 @@ namespace KinectStreams
             btnLeftArm.Foreground = Brushes.White;
             btnRightArm.Foreground = Brushes.White;          
             _sensor = KinectSensor.GetDefault();
+            DispatcherTimer dt = new DispatcherTimer{
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            dt.Tick += dtTicker;
+            dt.Start();
+
+
 
             if (_sensor != null)
             {
@@ -57,7 +65,17 @@ namespace KinectStreams
                 _reader = _sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
                 _reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
             }
+
+
         }
+
+        private int increment = 0;
+        private void dtTicker(object sender, EventArgs e)
+        {
+            increment++;
+            RestTimer.Text = increment.ToString();
+        }
+
 
         private void Window_Closed(object sender, EventArgs e)
         {
