@@ -38,12 +38,6 @@ namespace KinectStreams
         {
         }
 
-        private void btnInput_Click(object sender, RoutedEventArgs e)
-        {
-            //OptimizationAngleMenu frmOpt = new OptimizationAngleMenu();
-            //frmOpt.Show();
-        }
-
         private void btnSaveUser_Click(object sender, RoutedEventArgs e)
         {
             string tempHandLength = txtHandLength.Text.Trim();
