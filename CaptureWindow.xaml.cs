@@ -19,11 +19,17 @@ using System.IO;
 
 namespace KinectStreams
 {
+    
+
     /// <summary>
     /// Interaction logic for CaptureWindow.xaml
     /// </summary>
     public partial class CaptureWindow : Window
     {
+        public static double idealTheta = 39.22;
+
+        public int sendToServer = 0;
+
         #region Members
 
         Mode _mode = Mode.Color;
@@ -52,12 +58,8 @@ namespace KinectStreams
             btnLeftArm.Foreground = Brushes.White;
             btnRightArm.Foreground = Brushes.White;          
             _sensor = KinectSensor.GetDefault();
-            DispatcherTimer dt = new DispatcherTimer{
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            dt.Tick += dtTicker;
-            dt.Start();
 
+            
 
 
             if (_sensor != null)
@@ -76,6 +78,10 @@ namespace KinectStreams
         {
             increment++;
             RestTimer.Text = increment.ToString();
+            if(increment >= 15)
+            {
+                sendToServer = 2;
+            }
         }
 
 
@@ -93,7 +99,8 @@ namespace KinectStreams
         }
 
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
-        {
+        { 
+
             var reference = e.FrameReference.AcquireFrame();
 
             // Color
@@ -136,8 +143,7 @@ namespace KinectStreams
             using (var frame = reference.BodyFrameReference.AcquireFrame())
             {
                 if (frame != null)
-                {
-                    int sendToServer = 2;
+                {                    
                     var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
                     httpWebRequest.ContentType = "application/json";
                     httpWebRequest.Method = "POST";
@@ -171,24 +177,35 @@ namespace KinectStreams
                                 // Draw skeleton.
                                 if (_displayBody)
                                 {
+                                    double theta = 0;
                                     if (btnLeftArm.IsChecked == true)
                                     {
-                                        List<double> jointPositions = canvas.getPoints(body, true);
+                                        double[] jointPositions = canvas.getPoints(body, true);
                                         txtShoulderX.Text = jointPositions[0].ToString();
                                         txtShoulderY.Text = jointPositions[1].ToString();
                                         txtElbowX.Text = jointPositions[2].ToString();
                                         txtElbowY.Text = jointPositions[3].ToString();
-                                        txtUpperToForearmTheta.Text = "Theta: " + canvas.DrawSkeleton(body, true);
+                                        theta = canvas.DrawSkeleton(body, true);
+                                        txtUpperToForearmTheta.Text = "Theta: " + theta;
                                     }
                                     else
                                     {
-                                        List<double> jointPositions = canvas.getPoints(body, false);
+                                        double[] jointPositions = canvas.getPoints(body, false);
                                         txtShoulderX.Text = jointPositions[0].ToString();
                                         txtShoulderY.Text = jointPositions[1].ToString();
                                         txtElbowX.Text = jointPositions[2].ToString();
                                         txtElbowY.Text = jointPositions[3].ToString();
-                                        txtUpperToForearmTheta.Text = "Theta: " + canvas.DrawSkeleton(body, false);
+                                        theta = canvas.DrawSkeleton(body, true);
+                                        txtUpperToForearmTheta.Text = "Theta: " + theta;
                                     }
+                                    if((theta >= idealTheta - 5) && (theta <= idealTheta + 5))
+                                    {
+                                        sendToServer = 0;
+                                    }
+                                    else
+                                    {
+                                        sendToServer = 1;
+                                    } 
                                     
                                 }
                             }
@@ -215,7 +232,14 @@ namespace KinectStreams
 
         private void Body_Click(object sender, RoutedEventArgs e)
         {
-            if(btnLeftArm.IsChecked == false && btnRightArm.IsChecked == false)
+            DispatcherTimer dt = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            dt.Tick += dtTicker;
+            dt.Start();
+
+            if (btnLeftArm.IsChecked == false && btnRightArm.IsChecked == false)
             {
                 MessageBox.Show("Please select an arm to capture", "Invalid arm capture", MessageBoxButton.OK);
             }
