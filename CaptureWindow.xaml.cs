@@ -200,7 +200,7 @@ namespace KinectStreams
                                         txtShoulderY.Text = jointPositions[1].ToString();
                                         txtElbowX.Text = jointPositions[2].ToString();
                                         txtElbowY.Text = jointPositions[3].ToString();
-                                        theta = canvas.DrawSkeleton(body, true);
+                                        theta = canvas.DrawSkeleton(body, false);
                                         txtUpperToForearmTheta.Text = "Theta: " + theta;
                                     }
                                     if((theta >= idealTheta - 5) && (theta <= idealTheta + 5))
