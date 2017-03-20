@@ -28,6 +28,11 @@ namespace KinectStreams
     {
         public static double idealTheta = 39.22;
 
+        public DispatcherTimer dt = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(1)
+        };
+
         public int sendToServer = 0;
 
         #region Members
@@ -58,7 +63,7 @@ namespace KinectStreams
             btnLeftArm.Foreground = Brushes.White;
             btnRightArm.Foreground = Brushes.White;          
             _sensor = KinectSensor.GetDefault();
-
+            btnStop.IsEnabled = false;
             
 
 
@@ -232,10 +237,6 @@ namespace KinectStreams
 
         private void Body_Click(object sender, RoutedEventArgs e)
         {
-            DispatcherTimer dt = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
             dt.Tick += dtTicker;
             dt.Start();
 
@@ -246,19 +247,21 @@ namespace KinectStreams
             else
             {
                 _displayBody = !_displayBody;
-            }        
+                btnMenu.IsEnabled = false;
+            }
+            
         }
 
         #endregion
 
         private void btnLeftArm_Checked(object sender, RoutedEventArgs e)
         {
-            btnBodyCam.IsEnabled = true;
+            btnStart.IsEnabled = true;
         }
 
         private void btnRightArm_Checked(object sender, RoutedEventArgs e)
         {
-            btnBodyCam.IsEnabled = true;
+            btnStart.IsEnabled = true;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -269,6 +272,18 @@ namespace KinectStreams
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            dt.Stop();
+            _displayBody = !_displayBody;
+            btnMenu.IsEnabled = true;
+        }
+
+        private void btnMenu_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
         }
     }
 
