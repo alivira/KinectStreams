@@ -40,5 +40,10 @@ namespace KinectStreams
         {
             cptWindow.Show();
         }
+
+        private void btnHistory_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
