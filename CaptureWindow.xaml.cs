@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Net;
+using System.IO;
 
 namespace KinectStreams
 {
@@ -135,6 +137,25 @@ namespace KinectStreams
             {
                 if (frame != null)
                 {
+                    int sendToServer = 2;
+                    var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
+                    httpWebRequest.ContentType = "application/json";
+                    httpWebRequest.Method = "POST";
+
+                    using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                    {
+                        string json = "{\"data\":" + sendToServer + "}";
+
+                        streamWriter.Write(json);
+                        streamWriter.Flush();
+                        streamWriter.Close();
+                    }
+
+                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+                    }
                     canvas.Children.Clear();
 
                     _bodies = new Body[frame.BodyFrameSource.BodyCount];
@@ -152,10 +173,20 @@ namespace KinectStreams
                                 {
                                     if (btnLeftArm.IsChecked == true)
                                     {
-                                       txtUpperToForearmTheta.Text = "Theta: " + canvas.DrawSkeleton(body, true);
+                                        List<double> jointPositions = canvas.getPoints(body, true);
+                                        txtShoulderX.Text = jointPositions[0].ToString();
+                                        txtShoulderY.Text = jointPositions[1].ToString();
+                                        txtElbowX.Text = jointPositions[2].ToString();
+                                        txtElbowY.Text = jointPositions[3].ToString();
+                                        txtUpperToForearmTheta.Text = "Theta: " + canvas.DrawSkeleton(body, true);
                                     }
                                     else
                                     {
+                                        List<double> jointPositions = canvas.getPoints(body, false);
+                                        txtShoulderX.Text = jointPositions[0].ToString();
+                                        txtShoulderY.Text = jointPositions[1].ToString();
+                                        txtElbowX.Text = jointPositions[2].ToString();
+                                        txtElbowY.Text = jointPositions[3].ToString();
                                         txtUpperToForearmTheta.Text = "Theta: " + canvas.DrawSkeleton(body, false);
                                     }
                                     
