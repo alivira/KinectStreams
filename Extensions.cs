@@ -138,6 +138,18 @@ namespace KinectStreams
             return value;
         }
 
+        public static UntrackedJoint UntrackedScaleTo(this UntrackedJoint joint, double width, double height, float skeletonMaxX, float skeletonMaxY)
+        {
+            joint.Position = new CameraSpacePoint
+            {
+                X = Scale(width, skeletonMaxX, joint.Position.X),
+                Y = Scale(height, skeletonMaxY, -joint.Position.Y),
+                Z = joint.Position.Z
+            };
+
+            return joint;
+        }
+
         #endregion
 
         #region Drawing
@@ -201,7 +213,7 @@ namespace KinectStreams
                         continue;
                     }
                 }
-                canvas.DrawPoint(joint);
+                canvas.DrawPoint(joint, Colors.LightBlue, 20);
             }
 
             //canvas.DrawLine(body.Joints[JointType.Head], body.Joints[JointType.Neck]);
@@ -284,7 +296,7 @@ namespace KinectStreams
             //canvas.DrawLine(body.Joints[JointType.AnkleRight], body.Joints[JointType.FootRight]);
         }
 
-        public static void DrawPoint(this Canvas canvas, Joint joint)
+        public static void DrawPoint(this Canvas canvas, Joint joint, Color color, int diameter)
         {
             if (joint.TrackingState == TrackingState.NotTracked) return;
 
@@ -292,9 +304,9 @@ namespace KinectStreams
 
             Ellipse ellipse = new Ellipse
             {
-                Width = 20,
-                Height = 20,
-                Fill = new SolidColorBrush(Colors.LightBlue)
+                Width = diameter,
+                Height = diameter,
+                Fill = new SolidColorBrush(color)
             };
 
             Canvas.SetLeft(ellipse, joint.Position.X - ellipse.Width / 2);
@@ -322,9 +334,127 @@ namespace KinectStreams
 
             canvas.Children.Add(line);
         }
+        
+        internal static void DrawUntrackedPoint(this Canvas canvas, UntrackedJoint joint, Color color)
+        {
 
-        #endregion
+            joint = joint.UntrackedScaleTo(canvas.ActualWidth, canvas.ActualHeight, 1.0f, 1.0f);
+
+            Ellipse ellipse = new Ellipse
+            {
+                Width = 50,
+                Height = 50,
+                Fill = new SolidColorBrush(color)
+            };
+
+            Canvas.SetLeft(ellipse, joint.Position.X - ellipse.Width / 2);
+            Canvas.SetTop(ellipse, joint.Position.Y - ellipse.Height / 2);
+
+            canvas.Children.Add(ellipse);
+        }
+        
+        public static void DrawIdeal(this Canvas canvas, bool leftArmChecked, double angleWrist, double angleForeArm, double angleUpperArm, double upperArmLength, double foreArmLength, double wristLength, Body body)
+        {//for points
+            Joint shoulderIdeal = new Joint();
+            UntrackedJoint elbowIdeal = new UntrackedJoint();
+            UntrackedJoint wristIdeal = new UntrackedJoint();
+            UntrackedJoint handIdeal = new UntrackedJoint();
+
+            if (leftArmChecked == true)
+            {
+                //draw skeleton facing left
+                //elbowIdeal = elbowIdeal.ScaleTo(canvas.ActualWidth, canvas.ActualHeight, )
+                shoulderIdeal = body.Joints[JointType.ShoulderLeft];
+                elbowIdeal.Position = new CameraSpacePoint
+                {
+                    X = (float)shoulderIdeal.Position.X + (float)Math.Cos(angleUpperArm) * (float)upperArmLength,
+                    Y = (float)shoulderIdeal.Position.Y - (float)Math.Sin(angleUpperArm) * (float)upperArmLength
+                };
+
+                wristIdeal.Position = new CameraSpacePoint
+                {
+                    X = (float)shoulderIdeal.Position.X + (float)Math.Cos(angleUpperArm) * (float)upperArmLength + (float)Math.Cos(angleForeArm) * (float)foreArmLength,
+                    Y = (float)shoulderIdeal.Position.Y - (float)Math.Sin(angleUpperArm) * (float)upperArmLength - (float)Math.Sin(angleForeArm) * (float)foreArmLength,
+                };
+
+                handIdeal.Position = new CameraSpacePoint
+                {
+                    X = (float)shoulderIdeal.Position.X + (float)Math.Cos(angleUpperArm) * (float)upperArmLength + (float)Math.Cos(angleForeArm) * (float)foreArmLength + (float)Math.Cos(angleWrist) * (float)wristLength,
+                    Y = (float)shoulderIdeal.Position.Y - (float)Math.Sin(angleUpperArm) * (float)upperArmLength - (float)Math.Sin(angleForeArm) * (float)foreArmLength - (float)Math.Sin(angleWrist) * (float)wristLength,
+                };
+
+
+            }
+
+            else
+            {
+                //draw skeleton facing right
+                shoulderIdeal = body.Joints[JointType.ShoulderRight];
+                elbowIdeal.Position = new CameraSpacePoint
+                {
+                    X = (float)shoulderIdeal.Position.X - (float)Math.Cos(angleUpperArm) * (float)upperArmLength,
+                    Y = (float)shoulderIdeal.Position.Y - (float)Math.Sin(angleUpperArm) * (float)upperArmLength
+                };
+
+                wristIdeal.Position = new CameraSpacePoint
+                {
+                    X = (float)shoulderIdeal.Position.X - (float)Math.Cos(angleUpperArm) * (float)upperArmLength - (float)Math.Cos(angleForeArm) * (float)foreArmLength,
+                    Y = (float)shoulderIdeal.Position.Y - (float)Math.Sin(angleUpperArm) * (float)upperArmLength - (float)Math.Sin(angleForeArm) * (float)foreArmLength,
+                };
+
+                handIdeal.Position = new CameraSpacePoint
+                {
+                    X = (float)shoulderIdeal.Position.X - (float)Math.Cos(angleUpperArm) * (float)upperArmLength - (float)Math.Cos(angleForeArm) * (float)foreArmLength - (float)Math.Cos(angleWrist) * (float)wristLength,
+                    Y = (float)shoulderIdeal.Position.Y - (float)Math.Sin(angleUpperArm) * (float)upperArmLength - (float)Math.Sin(angleForeArm) * (float)foreArmLength - (float)Math.Sin(angleWrist) * (float)wristLength,
+                };
+            }
+            canvas.DrawUntrackedPoint(elbowIdeal, Colors.DimGray);
+            canvas.DrawPoint(shoulderIdeal, Colors.DimGray, 50);
+            canvas.DrawUntrackedPoint(wristIdeal, Colors.DimGray);
+            canvas.DrawUntrackedPoint(handIdeal, Colors.DimGray);
+
+            Line upperArm = new Line
+            {
+                X1 = shoulderIdeal.ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.X,
+                Y1 = shoulderIdeal.ScaleTo(canvas.ActualWidth, canvas.ActualHeight).Position.Y,
+                X2 = elbowIdeal.Position.X,
+                Y2 = elbowIdeal.Position.Y,
+                StrokeThickness = 35,
+                Stroke = new SolidColorBrush(Colors.DimGray)
+            };
+
+            Line foreArm = new Line
+            {
+                X1 = wristIdeal.Position.X,
+                Y1 = wristIdeal.Position.Y,
+                X2 = elbowIdeal.Position.X,
+                Y2 = elbowIdeal.Position.Y,
+                StrokeThickness = 35,
+                Stroke = new SolidColorBrush(Colors.DimGray)
+            };
+
+            Line hand = new Line
+            {
+                X1 = wristIdeal.Position.X,
+                Y1 = wristIdeal.Position.Y,
+                X2 = handIdeal.Position.X,
+                Y2 = handIdeal.Position.Y,
+                StrokeThickness = 35,
+                Stroke = new SolidColorBrush(Colors.DimGray)
+            };
+            canvas.Children.Add(upperArm);
+            canvas.Children.Add(foreArm);
+            canvas.Children.Add(hand);
+            //return Math.Round(Math.Abs(shoulderIdeal.Position.X - elbowIdeal.Position.X), 4);
+        }
+
+    }
+    #endregion
+}
+
+    public class UntrackedJoint
+    {
+        public CameraSpacePoint Position;
+
     }
 
-
-}
