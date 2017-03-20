@@ -23,7 +23,7 @@ namespace KinectStreams
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            btnHistory.IsEnabled = false;
         }
 
         private void Window_Closed(object sender, EventArgs e)
