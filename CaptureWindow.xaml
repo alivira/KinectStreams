@@ -8,15 +8,13 @@
         <Grid Style="{StaticResource GridButtonsStyle}">
             <StackPanel Style="{StaticResource StackPanelButtonsStyle}">
                 <Button x:Name="btnColorCam" Content="Color" Style="{StaticResource ButtonStyle}" Click="Color_Click" />
-                <Button x:Name="btnDepthCam" Content="Depth" Style="{StaticResource ButtonStyle}" Click="Depth_Click" />
-                <Button x:Name="btnInfraredCam" Content="Infrared" Style="{StaticResource ButtonStyle}" Click="Infrared_Click" />
-                <Button x:Name="btnBodyCam" Content="Body" Style="{StaticResource ButtonStyle}" Click="Body_Click" />
+                <Button x:Name="btnStart" Content="Start" Style="{StaticResource ButtonStyle}" Click="Start_Click" />
             </StackPanel>
             <RadioButton x:Name="btnLeftArm" Content="Left Arm" HorizontalAlignment="Left" Margin="1216,22,0,0" VerticalAlignment="Top" Checked="btnLeftArm_Checked"/>
             <RadioButton x:Name="btnRightArm" Content="Right Arm" HorizontalAlignment="Left" Margin="1309,22,0,0" VerticalAlignment="Top" Checked="btnRightArm_Checked"/>
             <TextBox x:Name="txtUpperToForearmTheta" HorizontalAlignment="Left" Height="23" Margin="571,17,0,0" TextWrapping="Wrap" Text="Theta" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
             
-            <TextBox x:Name="RestTimer" HorizontalAlignment="Left" Height="23" Margin="216,22,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="RestTimer" HorizontalAlignment="Left" Height="23" Margin="208,14,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         </Grid>
     </Grid>
 </Window>

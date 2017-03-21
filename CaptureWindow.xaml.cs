@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Net;
+ using System.IO;
 
 namespace KinectStreams
 {
@@ -182,7 +184,7 @@ namespace KinectStreams
             _mode = Mode.Infrared;
         }
 
-        private void Body_Click(object sender, RoutedEventArgs e)
+        private void Start_Click(object sender, RoutedEventArgs e)
         {
             if(btnLeftArm.IsChecked == false && btnRightArm.IsChecked == false)
             {
@@ -198,12 +200,12 @@ namespace KinectStreams
 
         private void btnLeftArm_Checked(object sender, RoutedEventArgs e)
         {
-            btnBodyCam.IsEnabled = true;
+            btnStart.IsEnabled = true;
         }
 
         private void btnRightArm_Checked(object sender, RoutedEventArgs e)
         {
-            btnBodyCam.IsEnabled = true;
+            btnStart.IsEnabled = true;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
