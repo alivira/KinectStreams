@@ -45,6 +45,15 @@ namespace KinectStreams
 
         #endregion
 
+        private static double idealTheta = 39.22;
+
+        private int sendToServer = 0;
+
+        private DispatcherTimer dt = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(1)
+        };
+
         #region Event handlers
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -52,11 +61,7 @@ namespace KinectStreams
             btnLeftArm.Foreground = Brushes.White;
             btnRightArm.Foreground = Brushes.White;          
             _sensor = KinectSensor.GetDefault();
-            DispatcherTimer dt = new DispatcherTimer{
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            dt.Tick += dtTicker;
-            dt.Start();
+            
 
 
 
@@ -72,10 +77,36 @@ namespace KinectStreams
         }
 
         private int increment = 0;
+
         private void dtTicker(object sender, EventArgs e)
         {
             increment++;
             RestTimer.Text = increment.ToString();
+
+            if(increment >= 15)
+            {
+                sendToServer = 2;
+            }
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                string json = "{\"data\":" + sendToServer + "}";
+
+                streamWriter.Write(json);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd();
+            }
+
         }
 
 
@@ -109,7 +140,7 @@ namespace KinectStreams
             }
 
             // Depth
-            using (var frame = reference.DepthFrameReference.AcquireFrame())
+            /*using (var frame = reference.DepthFrameReference.AcquireFrame())
             {
                 if (frame != null)
                 {
@@ -130,13 +161,14 @@ namespace KinectStreams
                         camera.Source = frame.ToBitmap();
                     }
                 }
-            }
+            }*/
 
             // Body
             using (var frame = reference.BodyFrameReference.AcquireFrame())
             {
                 if (frame != null)
                 {
+
                     canvas.Children.Clear();
 
                     _bodies = new Body[frame.BodyFrameSource.BodyCount];
@@ -152,15 +184,29 @@ namespace KinectStreams
                                 // Draw skeleton.
                                 if (_displayBody)
                                 {
+                                    double theta = 0;
                                     if (btnLeftArm.IsChecked == true)
                                     {
-                                       txtUpperToForearmTheta.Text = "Theta: " + canvas.DrawSkeleton(body, true);
+                                        theta = canvas.DrawSkeleton(body, true);
+                                        txtUpperToForearmTheta.Text = "Theta: " + theta;
+                                        canvas.DrawIdeal(true, 0.7754, 0.6845, 0.9854, 0.32, 0.25, 0.18, body);
                                     }
                                     else
                                     {
-                                        txtUpperToForearmTheta.Text = "Theta: " + canvas.DrawSkeleton(body, false);
+                                        theta = canvas.DrawSkeleton(body, false);
+                                        txtUpperToForearmTheta.Text = "Theta: " + theta;
+                                        canvas.DrawIdeal(false, 0.7754, 0.6845, 0.9854, 0.32, 0.25, 0.18, body);
                                     }
-                                    
+
+                                    if ((theta >= idealTheta - 5) && (theta <= idealTheta + 5))
+                                    {
+                                        sendToServer = 0;
+                                    }
+                                    else
+                                    {
+                                        sendToServer = 1;
+                                    }
+
                                 }
                             }
                         }
@@ -186,7 +232,9 @@ namespace KinectStreams
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-            if(btnLeftArm.IsChecked == false && btnRightArm.IsChecked == false)
+            dt.Tick += dtTicker;
+            dt.Start();
+            if (btnLeftArm.IsChecked == false && btnRightArm.IsChecked == false)
             {
                 MessageBox.Show("Please select an arm to capture", "Invalid arm capture", MessageBoxButton.OK);
             }
