@@ -212,9 +212,9 @@ namespace KinectStreams
             }
 
             float shoulderPoint_X = shoulder.Position.X;
-            float shoulderPoint_Y = body.Joints[JointType.ShoulderLeft].Position.Y;
-            float elbowPoint_X = body.Joints[JointType.ElbowLeft].Position.X;
-            float elbowPoint_Y = body.Joints[JointType.ElbowLeft].Position.Y;
+            float shoulderPoint_Y = shoulder.Position.Y;
+            float elbowPoint_X = elbow.Position.X;
+            float elbowPoint_Y = elbow.Position.Y;
 
 
             float wristPoint_X = body.Joints[JointType.WristLeft].Position.X;
@@ -224,7 +224,22 @@ namespace KinectStreams
             double lengthElbowToWrist = Math.Pow(wristPoint_X - elbowPoint_X, 2) + Math.Pow(wristPoint_Y - elbowPoint_Y, 2);
             double lengthShoulderToWrist = Math.Pow(shoulderPoint_X - wristPoint_X, 2) + Math.Pow(shoulderPoint_Y - wristPoint_Y, 2);
 
-            return Math.Round(((Math.Acos((lengthShoulderToElbow + lengthElbowToWrist - lengthShoulderToWrist) / (2 * Math.Sqrt(lengthShoulderToElbow) * Math.Sqrt(lengthElbowToWrist)))) * 180 / Math.PI),2);
+            double temp = 0;
+            if (elbowPoint_X > shoulderPoint_X)
+            {
+                temp = 180 - Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+            }
+            else if (elbowPoint_X == shoulderPoint_X)
+            {
+                temp = 90;
+            }
+            else if (elbowPoint_X < shoulderPoint_X)
+            {
+                temp = Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+            }
+            return temp;
+
+            //x`return Math.Round(((Math.Acos((lengthShoulderToElbow + lengthElbowToWrist - lengthShoulderToWrist) / (2 * Math.Sqrt(lengthShoulderToElbow) * Math.Sqrt(lengthElbowToWrist)))) * 180 / Math.PI),2);
             
             //canvas.DrawLine(body.Joints[JointType.HandTipLeft], body.Joints[JointType.ThumbLeft]);
             //canvas.DrawLine(body.Joints[JointType.HandTipRight], body.Joints[JointType.ThumbRight]);
