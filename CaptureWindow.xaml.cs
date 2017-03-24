@@ -88,7 +88,8 @@ namespace KinectStreams
                 sendToServer = 2;
             }
 
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
+             var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
+            httpWebRequest.Proxy = null;
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
@@ -168,6 +169,25 @@ namespace KinectStreams
             {
                 if (frame != null)
                 {
+                    /*var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
+                    httpWebRequest.Proxy = null;
+                    httpWebRequest.ContentType = "application/json";
+                    httpWebRequest.Method = "POST";
+
+                    using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                    {
+                        string json = "{\"data\":" + sendToServer + "}";
+
+                        streamWriter.Write(json);
+                        streamWriter.Flush();
+                        streamWriter.Close();
+                    }
+
+                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+                    }*/
 
                     canvas.Children.Clear();
 
@@ -184,28 +204,38 @@ namespace KinectStreams
                                 // Draw skeleton.
                                 if (_displayBody)
                                 {
-                                    double theta = 0;
+                                    double[] theta = { };
                                     if (btnLeftArm.IsChecked == true)
                                     {
                                         theta = canvas.DrawSkeleton(body, true);
-                                        txtUpperToForearmTheta.Text = "Theta: " + theta;
-                                        canvas.DrawIdeal(true, 0.7754, 0.6845, 0.9854, 0.32, 0.25, 0.18, body);
+                                        if(theta != null)
+                                        {
+                                            txtForearmTheta.Text = "Forearm: " + theta[0];
+                                            txtElbowTheta.Text = "Elbow: " + theta[1];
+                                            txtWristTheta.Text = "Wrist: " + theta[2];                                        
+                                        }
+                                        //canvas.DrawIdeal(true, 0.7754, 0.6845, 0.9854, 0.32, 0.25, 0.18, body);
                                     }
                                     else
                                     {
                                         theta = canvas.DrawSkeleton(body, false);
-                                        txtUpperToForearmTheta.Text = "Theta: " + theta;
-                                        canvas.DrawIdeal(false, 0.7754, 0.6845, 0.9854, 0.32, 0.25, 0.18, body);
+                                        if(theta != null)
+                                        {
+                                            txtForearmTheta.Text = "Forearm: " + theta[0];
+                                            txtElbowTheta.Text = "Elbow: " + theta[1];
+                                            txtWristTheta.Text = "Wrist: " + theta[2];
+                                        }
+                                        //canvas.DrawIdeal(false, 0.7754, 0.6845, 0.9854, 0.32, 0.25, 0.18, body);
                                     }
 
-                                    if ((theta >= idealTheta - 5) && (theta <= idealTheta + 5))
+                                    /*if ((theta >= idealTheta - 5) && (theta <= idealTheta + 5))
                                     {
                                         sendToServer = 0;
                                     }
                                     else
                                     {
                                         sendToServer = 1;
-                                    }
+                                    }*/
 
                                 }
                             }

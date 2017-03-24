@@ -154,9 +154,9 @@ namespace KinectStreams
 
         #region Drawing
 
-        public static double DrawSkeleton(this Canvas canvas, Body body, bool leftArmChecked)
+        public static double[] DrawSkeleton(this Canvas canvas, Body body, bool leftArmChecked)
         {
-            if (body == null) return 0;
+            if (body == null) return null;
 
             foreach (Joint joint in body.Joints.Values)
             {
@@ -164,7 +164,8 @@ namespace KinectStreams
                 if (joint.JointType.Equals(JointType.HipLeft) || joint.JointType.Equals(JointType.HipRight) || joint.JointType.Equals(JointType.KneeLeft)
                     || joint.JointType.Equals(JointType.KneeRight) || joint.JointType.Equals(JointType.AnkleLeft) || joint.JointType.Equals(JointType.AnkleRight)
                     || joint.JointType.Equals(JointType.FootLeft) || joint.JointType.Equals(JointType.FootRight) || joint.JointType.Equals(JointType.ThumbLeft)
-                    || joint.JointType.Equals(JointType.ThumbRight) || joint.JointType.Equals(JointType.SpineBase))
+                    || joint.JointType.Equals(JointType.ThumbRight) || joint.JointType.Equals(JointType.SpineBase) || joint.JointType.Equals(JointType.SpineMid)
+                    || joint.JointType.Equals(JointType.SpineShoulder) || joint.JointType.Equals(JointType.Neck) || joint.JointType.Equals(JointType.Head))
                 {
                     continue;
                 }
@@ -187,9 +188,9 @@ namespace KinectStreams
                 canvas.DrawPoint(joint, Colors.LightBlue, 20);
             }
 
-            canvas.DrawLine(body.Joints[JointType.Head], body.Joints[JointType.Neck]);
-            canvas.DrawLine(body.Joints[JointType.Neck], body.Joints[JointType.SpineShoulder]);
-            canvas.DrawLine(body.Joints[JointType.SpineShoulder], body.Joints[JointType.SpineMid]);
+            //canvas.DrawLine(body.Joints[JointType.Head], body.Joints[JointType.Neck]);
+            //canvas.DrawLine(body.Joints[JointType.Neck], body.Joints[JointType.SpineShoulder]);
+            //canvas.DrawLine(body.Joints[JointType.SpineShoulder], body.Joints[JointType.SpineMid]);
 
             Joint shoulder = new Joint();
             Joint elbow = new Joint();
@@ -198,7 +199,7 @@ namespace KinectStreams
 
             if (leftArmChecked)
             {
-                canvas.DrawLine(body.Joints[JointType.SpineShoulder], body.Joints[JointType.ShoulderLeft]);
+                //canvas.DrawLine(body.Joints[JointType.SpineShoulder], body.Joints[JointType.ShoulderLeft]);
                 canvas.DrawLine(body.Joints[JointType.ShoulderLeft], body.Joints[JointType.ElbowLeft]);
                 canvas.DrawLine(body.Joints[JointType.ElbowLeft], body.Joints[JointType.WristLeft]);
                 canvas.DrawLine(body.Joints[JointType.WristLeft], body.Joints[JointType.HandLeft]);
@@ -212,7 +213,7 @@ namespace KinectStreams
             }
             else
             {
-                canvas.DrawLine(body.Joints[JointType.SpineShoulder], body.Joints[JointType.ShoulderRight]);
+               // canvas.DrawLine(body.Joints[JointType.SpineShoulder], body.Joints[JointType.ShoulderRight]);
                 canvas.DrawLine(body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight]);
                 canvas.DrawLine(body.Joints[JointType.ElbowRight], body.Joints[JointType.WristRight]);
                 canvas.DrawLine(body.Joints[JointType.WristRight], body.Joints[JointType.HandRight]);
@@ -274,19 +275,20 @@ namespace KinectStreams
             }
 
 
-            double temp = 0;
+            double elbowAngle = 0;
             if (elbowPoint_X > shoulderPoint_X)
             {
-                temp = 180 - Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+                elbowAngle = 180 - Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
             }
             else if (elbowPoint_X == shoulderPoint_X)
             {
-                temp = 90;
+                elbowAngle = 90;
             }
             else if (elbowPoint_X < shoulderPoint_X)
             {
-                temp = Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+                elbowAngle = Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
             }
+            double[] temp = { forearmAngle, elbowAngle, wristAngle };
             return temp;
 
             //x`return Math.Round(((Math.Acos((lengthShoulderToElbow + lengthElbowToWrist - lengthShoulderToWrist) / (2 * Math.Sqrt(lengthShoulderToElbow) * Math.Sqrt(lengthElbowToWrist)))) * 180 / Math.PI),2);
