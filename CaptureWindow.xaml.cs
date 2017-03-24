@@ -83,7 +83,7 @@ namespace KinectStreams
             increment++;
             RestTimer.Text = increment.ToString();
 
-            if(increment >= 15)
+            if(increment >= 60)
             {
                 sendToServer = 2;
             }
@@ -228,14 +228,14 @@ namespace KinectStreams
                                         //canvas.DrawIdeal(false, 0.7754, 0.6845, 0.9854, 0.32, 0.25, 0.18, body);
                                     }
 
-                                    /*if ((theta >= idealTheta - 5) && (theta <= idealTheta + 5))
+                                    if ((theta[1] >= idealTheta - 5) && (theta[1] <= idealTheta + 5))
                                     {
                                         sendToServer = 0;
                                     }
                                     else
                                     {
                                         sendToServer = 1;
-                                    }*/
+                                    }
 
                                 }
                             }
