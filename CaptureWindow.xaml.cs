@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Net;
  using System.IO;
+using BytescoutScreenCapturingLib;
 
 namespace KinectStreams
 {
@@ -59,6 +60,8 @@ namespace KinectStreams
             Interval = TimeSpan.FromSeconds(1)
         };
 
+        private Capturer capturer;
+
         #region Event handlers
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -66,8 +69,36 @@ namespace KinectStreams
             btnLeftArm.Foreground = Brushes.White;
             btnRightArm.Foreground = Brushes.White;          
             _sensor = KinectSensor.GetDefault();
-            
 
+            capturer = new Capturer(); // create new screen capturer object
+            //capturer.CapturingType = CaptureAreaType.catRegion; // set capturing area type to catScreen to capture whole screen
+            capturer.CapturingType = CaptureAreaType.catScreen; // set capturing area type to catScreen to capture whole screen
+
+            capturer.OutputFileName = "EntireScreenCaptured.wmv"; // set output video filename to .WVM or .AVI filename
+            /*double testing = this.Width;
+            double testing2 = this.ActualWidth;
+            double border = (testing2 - testing) / 2;
+            //double test = this.fo
+            double test2 = this.Top;
+            
+            capturer.CaptureRectLeft = Convert.ToInt32(this.Left);
+            capturer.CaptureRectTop = Convert.ToInt32(this.Top);
+            */
+            // set output video width and height
+            capturer.OutputWidth = Convert.ToInt32(this.Width);
+            capturer.OutputHeight = Convert.ToInt32(this.Height);
+
+            // WMV and WEBM output use WMVVideoBitrate property to control output video bitrate
+            // so try to increase it by x2 or x3 times if you think the output video are you are getting is laggy
+            capturer.WMVVideoBitrate = capturer.WMVVideoBitrate * 2;
+
+            // uncomment to set Bytescout Lossless Video format output video compression method
+            //do not forget to set file to .avi format if you use Video Codec Name
+            //capturer.CurrentVideoCodecName = "Bytescout Lossless";             
+
+
+            // uncomment to enable recording of semitransparent or layered windows (Warning: may cause mouse cursor flickering)
+            // capturer.CaptureTransparentControls = true;
 
 
             if (_sensor != null)
@@ -131,6 +162,10 @@ namespace KinectStreams
             {
                 _sensor.Close();
             }
+
+            // Release resources
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(capturer);
+            capturer = null;
         }
 
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
@@ -303,15 +338,16 @@ namespace KinectStreams
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-            dt.Tick += dtTicker;
-            dt.Start();
             if (btnLeftArm.IsChecked == false && btnRightArm.IsChecked == false)
             {
                 MessageBox.Show("Please select an arm to capture", "Invalid arm capture", MessageBoxButton.OK);
             }
             else
             {
-                _displayBody = !_displayBody;
+                dt.Tick += dtTicker;
+                dt.Start();
+                capturer.Run(); // run screen video capturing 
+                _displayBody = true;
             }        
         }
 
@@ -335,6 +371,13 @@ namespace KinectStreams
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Stop_Click(object sender, RoutedEventArgs e)
+        {
+            _displayBody = false;
+            capturer.Stop();
+            dt.Stop();
         }
     }
 
