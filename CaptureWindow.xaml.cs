@@ -69,6 +69,7 @@ namespace KinectStreams
             btnLeftArm.Foreground = Brushes.White;
             btnRightArm.Foreground = Brushes.White;          
             _sensor = KinectSensor.GetDefault();
+            btnStop.IsEnabled = false;
 
             capturer = new Capturer(); // create new screen capturer object
             //capturer.CapturingType = CaptureAreaType.catRegion; // set capturing area type to catScreen to capture whole screen
@@ -279,39 +280,39 @@ namespace KinectStreams
 
 
                                     //Evaluate angle of the wrist
-                                    if ((theta[0] >= idealThetaA - 5) && (theta[0] <= idealThetaA + 5))
+                                    if ((theta[0] >= idealThetaA - 20) && (theta[0] <= idealThetaA + 20))
                                     {
                                         posture = 0;
-                                        sendToServerWrist = false;
+                                        sendToServerShoulder = true;
                                     }
                                     else
                                     {
                                         posture = 1;
-                                        sendToServerWrist = true;
+                                        sendToServerShoulder = false;
                                     }
 
                                     //Evaluate angle of the elbow
-                                    if ((theta[1] >= idealThetaB - 5) && (theta[1] <= idealThetaB + 5))
+                                    if ((theta[1] >= idealThetaB - 10) && (theta[1] <= idealThetaB + 10))
                                     {
                                         posture = 0;
-                                        sendToServerElbow = false;
+                                        sendToServerElbow = true;
                                     }
                                     else
                                     {
                                         posture = 1;
-                                        sendToServerElbow = true;
+                                        sendToServerElbow = false;
                                     }
 
                                     //Evaluate angle of the shoulder
-                                    if ((theta[2] >= idealThetaC - 5) && (theta[2] <= idealThetaC + 5))
+                                    if ((theta[2] >= idealThetaC - 10) && (theta[2] <= idealThetaC + 10))
                                     {
                                         posture = 0;
-                                        sendToServerShoulder = false;
+                                        sendToServerWrist = true;
                                     }
                                     else
                                     {
                                         posture = 1;
-                                        sendToServerShoulder = true;
+                                        sendToServerWrist = false;
                                     }
                                 }
                             }
@@ -348,6 +349,8 @@ namespace KinectStreams
                 dt.Start();
                 capturer.Run(); // run screen video capturing 
                 _displayBody = true;
+                btnStart.IsEnabled = false;
+                btnStop.IsEnabled = true;
             }        
         }
 
@@ -378,6 +381,8 @@ namespace KinectStreams
             _displayBody = false;
             capturer.Stop();
             dt.Stop();
+            btnStop.IsEnabled = false;
+            btnStart.IsEnabled = true;
         }
     }
 
