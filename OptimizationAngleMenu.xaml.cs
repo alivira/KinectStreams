@@ -19,9 +19,9 @@ namespace KinectStreams
     public partial class OptimizationAngleMenu : Window
     {
 
-        public int handLength = 0;
-        public int forearmLength = 0;
-        public int upperarmLength = 0;
+        public double handLength = 0;
+        public double forearmLength = 0;
+        public double upperarmLength = 0;
 
 
         public OptimizationAngleMenu()
@@ -43,9 +43,9 @@ namespace KinectStreams
             string tempHandLength = txtHandLength.Text.Trim();
             string tempforearmLength = txtForeArmLength.Text.Trim();
             string tempUpperarmLength = txtUpperLength.Text.Trim();
-            int.TryParse(tempHandLength, out handLength);
-            int.TryParse(tempforearmLength, out forearmLength);
-            int.TryParse(tempUpperarmLength, out upperarmLength);
+            double.TryParse(tempHandLength, out handLength);
+            double.TryParse(tempHandLength, out forearmLength);
+            double.TryParse(tempHandLength, out upperarmLength);
 
             bool invalidMeasurement = false;
 
@@ -74,6 +74,9 @@ namespace KinectStreams
             else
             {
                 this.Hide();
+                Global.handLength = handLength;
+                Global.forearmLength = forearmLength;
+                Global.upperarmLength = upperarmLength;
             }
         }
 
@@ -95,4 +98,10 @@ namespace KinectStreams
             txtUpperLength.BorderThickness = new Thickness(1.0);
         }
     }
+}
+class Global
+{
+    public static double handLength = 0.15;
+    public static double forearmLength = 0.25;
+    public static double upperarmLength = 0.3;
 }

@@ -39,3 +39,23 @@ C:\Users\Ali Vira\Documents\KinectStreams (1)\KinectStreams\KinectStreams\bin\De
 C:\Users\Ali Vira\Documents\KinectStreams (1)\KinectStreams\KinectStreams\bin\Debug\KinectStreams.exe
 C:\Users\Ali Vira\Documents\KinectStreams (1)\KinectStreams\KinectStreams\bin\Debug\KinectStreams.pdb
 C:\Users\Ali Vira\Documents\KinectStreams (1)\KinectStreams\KinectStreams\bin\Debug\Microsoft.Kinect.xml
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\bin\Debug\KinectStreams.exe.config
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\bin\Debug\KinectStreams.exe
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\bin\Debug\KinectStreams.pdb
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\bin\Debug\Microsoft.Kinect.dll
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\bin\Debug\Microsoft.Kinect.xml
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\KinectStreams.csprojResolveAssemblyReference.cache
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\CaptureWindow.baml
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\Menu.baml
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\OptimizationAngleMenu.baml
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\App.baml
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\CaptureWindow.g.cs
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\Menu.g.cs
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\OptimizationAngleMenu.g.cs
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\App.g.cs
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\KinectStreams_MarkupCompile.cache
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\KinectStreams.g.resources
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\KinectStreams.Properties.Resources.resources
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\KinectStreams.csproj.GenerateResource.Cache
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\KinectStreams.exe
+C:\Users\Evan Shen\Desktop\Kinect\KinectStreams\obj\Debug\KinectStreams.pdb

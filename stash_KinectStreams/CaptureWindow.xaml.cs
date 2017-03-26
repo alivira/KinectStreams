@@ -15,15 +15,26 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Net;
- using System.IO;
+using System.IO;
 
 namespace KinectStreams
 {
+    
+
     /// <summary>
     /// Interaction logic for CaptureWindow.xaml
     /// </summary>
     public partial class CaptureWindow : Window
     {
+        public static double idealTheta = 39.22;
+
+        public DispatcherTimer dt = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(1)
+        };
+
+        public int sendToServer = 0;
+
         #region Members
 
         Mode _mode = Mode.Color;
@@ -45,20 +56,6 @@ namespace KinectStreams
 
         #endregion
 
-        private static double idealThetaA = 44.43;
-        private static double idealThetaB = 39.22;
-        private static double idealThetaC = 56.46;
-
-        private bool sendToServerElbow = false;
-        private bool sendToServerWrist = false;
-        private bool sendToServerShoulder = false;
-        private bool sendToServerRest = false;
-
-        private DispatcherTimer dt = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromSeconds(1)
-        };
-
         #region Event handlers
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -66,8 +63,8 @@ namespace KinectStreams
             btnLeftArm.Foreground = Brushes.White;
             btnRightArm.Foreground = Brushes.White;          
             _sensor = KinectSensor.GetDefault();
+            btnStop.IsEnabled = false;
             
-
 
 
             if (_sensor != null)
@@ -82,40 +79,14 @@ namespace KinectStreams
         }
 
         private int increment = 0;
-        private int posture = 0;
-
         private void dtTicker(object sender, EventArgs e)
         {
             increment++;
-            increment = increment + posture;
             RestTimer.Text = increment.ToString();
-
             if(increment >= 15)
             {
-                sendToServerRest = true;
+                sendToServer = 2;
             }
-
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Method = "POST";
-
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-            {
-                string json = "{\"shoulder\":" + sendToServerShoulder.ToString().ToLower() + "," +
-               "\"elbow\":" + sendToServerElbow.ToString().ToLower() + "," +
-               "\"wrist\":" + sendToServerWrist.ToString().ToLower() + "," +
-               "\"end\":" + sendToServerRest.ToString().ToLower() + "}";
-                streamWriter.Write(json);
-                streamWriter.Flush();
-                streamWriter.Close();
-            }
-
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-            }
-
         }
 
 
@@ -133,7 +104,8 @@ namespace KinectStreams
         }
 
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
-        {
+        { 
+
             var reference = e.FrameReference.AcquireFrame();
 
             // Color
@@ -149,7 +121,7 @@ namespace KinectStreams
             }
 
             // Depth
-            /*using (var frame = reference.DepthFrameReference.AcquireFrame())
+            using (var frame = reference.DepthFrameReference.AcquireFrame())
             {
                 if (frame != null)
                 {
@@ -170,14 +142,31 @@ namespace KinectStreams
                         camera.Source = frame.ToBitmap();
                     }
                 }
-            }*/
+            }
 
             // Body
             using (var frame = reference.BodyFrameReference.AcquireFrame())
             {
                 if (frame != null)
-                {
+                {                    
+                    var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
+                    httpWebRequest.ContentType = "application/json";
+                    httpWebRequest.Method = "POST";
 
+                    using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                    {
+                        string json = "{\"data\":" + sendToServer + "}";
+
+                        streamWriter.Write(json);
+                        streamWriter.Flush();
+                        streamWriter.Close();
+                    }
+
+                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+                    }
                     canvas.Children.Clear();
 
                     _bodies = new Body[frame.BodyFrameSource.BodyCount];
@@ -193,55 +182,40 @@ namespace KinectStreams
                                 // Draw skeleton.
                                 if (_displayBody)
                                 {
-                                    double[] theta = new double[3] { 0, 0, 0 };
+                                    double theta = 0;
                                     if (btnLeftArm.IsChecked == true)
                                     {
-                                        canvas.DrawIdeal(true, 0.7754, 0.6845, 0.9854, Global.upperarmLength, Global.forearmLength, Global.handLength, body);
+                                        double[] jointPositions = canvas.getPoints(body, true);
+                                        txtShoulderX.Text = jointPositions[0].ToString();
+                                        txtShoulderY.Text = jointPositions[1].ToString();
+                                        txtElbowX.Text = jointPositions[2].ToString();
+                                        txtElbowY.Text = jointPositions[3].ToString();
+                                        canvas.DrawIdeal(true, 0.7754, 0.6845, 0.9854, 0.25, 0.25, 0.12, body);
                                         theta = canvas.DrawSkeleton(body, true);
-                                        txtUpperToForearmTheta.Text = "Theta: " + theta[1];
+                                        txtUpperToForearmTheta.Text = "Theta: " + theta;
                                     }
                                     else
                                     {
-                                        canvas.DrawIdeal(false, 0.7754, 0.6845, 0.9854, Global.upperarmLength, Global.forearmLength, Global.handLength, body);
+                                        double[] jointPositions = canvas.getPoints(body, false);
+                                        txtShoulderX.Text = jointPositions[0].ToString();
+                                        txtShoulderY.Text = jointPositions[1].ToString();
+                                        txtElbowX.Text = jointPositions[2].ToString();
+                                        txtElbowY.Text = jointPositions[3].ToString();
+
+                                        canvas.DrawIdeal(false, 0.7754, 0.6845, 0.9854, 0.32, 0.25, 0.18, body);
+
                                         theta = canvas.DrawSkeleton(body, false);
-                                        txtUpperToForearmTheta.Text = "Theta: " + theta[1];
+                                        txtUpperToForearmTheta.Text = "Theta: " + theta;
                                     }
-
-                                    //Evaluate angle of the wrist
-                                    if ((theta[0] >= idealThetaA - 5) && (theta[0] <= idealThetaA + 5))
+                                    if((theta >= idealTheta - 5) && (theta <= idealTheta + 5))
                                     {
-                                        posture = 0;
-                                        sendToServerWrist = false;
+                                        sendToServer = 0;
                                     }
                                     else
                                     {
-                                        posture = 1;
-                                        sendToServerWrist = true;
-                                    }
-
-                                    //Evaluate angle of the elbow
-                                    if ((theta[1] >= idealThetaB - 5) && (theta[1] <= idealThetaB + 5))
-                                    {
-                                        posture = 0;
-                                        sendToServerElbow = false;
-                                    }
-                                    else
-                                    {
-                                        posture = 1;
-                                        sendToServerElbow = true;
-                                    }
-
-                                    //Evaluate angle of the shoulder
-                                    if ((theta[2] >= idealThetaC - 5) && (theta[2] <= idealThetaC + 5))
-                                    {
-                                        posture = 0;
-                                        sendToServerShoulder = false;
-                                    }
-                                    else
-                                    {
-                                        posture = 1;
-                                        sendToServerShoulder = true;
-                                    }
+                                        sendToServer = 1;
+                                    } 
+                                    
                                 }
                             }
                         }
@@ -265,10 +239,11 @@ namespace KinectStreams
             _mode = Mode.Infrared;
         }
 
-        private void Start_Click(object sender, RoutedEventArgs e)
+        private void Body_Click(object sender, RoutedEventArgs e)
         {
             dt.Tick += dtTicker;
             dt.Start();
+
             if (btnLeftArm.IsChecked == false && btnRightArm.IsChecked == false)
             {
                 MessageBox.Show("Please select an arm to capture", "Invalid arm capture", MessageBoxButton.OK);
@@ -276,7 +251,9 @@ namespace KinectStreams
             else
             {
                 _displayBody = !_displayBody;
-            }        
+                btnMenu.IsEnabled = false;
+            }
+            
         }
 
         #endregion
@@ -299,6 +276,18 @@ namespace KinectStreams
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            dt.Stop();
+            _displayBody = !_displayBody;
+            btnMenu.IsEnabled = true;
+        }
+
+        private void btnMenu_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
         }
     }
 
