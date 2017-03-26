@@ -60,7 +60,7 @@ namespace KinectStreams
             Interval = TimeSpan.FromSeconds(1)
         };
 
-        private Capturer capturer;
+        private Capturer capturer = new Capturer();
 
         #region Event handlers
 
@@ -70,37 +70,6 @@ namespace KinectStreams
             btnRightArm.Foreground = Brushes.White;          
             _sensor = KinectSensor.GetDefault();
             btnStop.IsEnabled = false;
-
-            capturer = new Capturer(); // create new screen capturer object
-            //capturer.CapturingType = CaptureAreaType.catRegion; // set capturing area type to catScreen to capture whole screen
-            capturer.CapturingType = CaptureAreaType.catScreen; // set capturing area type to catScreen to capture whole screen
-
-            capturer.OutputFileName = "EntireScreenCaptured.wmv"; // set output video filename to .WVM or .AVI filename
-            /*double testing = this.Width;
-            double testing2 = this.ActualWidth;
-            double border = (testing2 - testing) / 2;
-            //double test = this.fo
-            double test2 = this.Top;
-            
-            capturer.CaptureRectLeft = Convert.ToInt32(this.Left);
-            capturer.CaptureRectTop = Convert.ToInt32(this.Top);
-            */
-            // set output video width and height
-            capturer.OutputWidth = Convert.ToInt32(this.Width);
-            capturer.OutputHeight = Convert.ToInt32(this.Height);
-
-            // WMV and WEBM output use WMVVideoBitrate property to control output video bitrate
-            // so try to increase it by x2 or x3 times if you think the output video are you are getting is laggy
-            capturer.WMVVideoBitrate = capturer.WMVVideoBitrate * 2;
-
-            // uncomment to set Bytescout Lossless Video format output video compression method
-            //do not forget to set file to .avi format if you use Video Codec Name
-            //capturer.CurrentVideoCodecName = "Bytescout Lossless";             
-
-
-            // uncomment to enable recording of semitransparent or layered windows (Warning: may cause mouse cursor flickering)
-            // capturer.CaptureTransparentControls = true;
-
 
             if (_sensor != null)
             {
@@ -347,6 +316,15 @@ namespace KinectStreams
             {
                 dt.Tick += dtTicker;
                 dt.Start();
+                capturer = new Capturer();                
+                string name = string.Format("{0}{1}EntireScreenCapture-{2:yyyy-MM-dd_hh-mm-ss-tt}.wmv", Environment.CurrentDirectory, 
+                    System.IO.Path.DirectorySeparatorChar, DateTime.Now);
+                
+                capturer.OutputFileName = name; // set output video filename to .WVM or .AVI filename
+                capturer.CapturingType = CaptureAreaType.catScreen; // set capturing area type to catScreen to capture whole screen
+                capturer.OutputWidth = Convert.ToInt32(this.Width);
+                capturer.OutputHeight = Convert.ToInt32(this.Height);
+                capturer.WMVVideoBitrate = capturer.WMVVideoBitrate * 2;
                 capturer.Run(); // run screen video capturing 
                 _displayBody = true;
                 btnStart.IsEnabled = false;

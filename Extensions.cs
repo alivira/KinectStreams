@@ -244,52 +244,107 @@ namespace KinectStreams
 
 
             double wristAngle = 0;
-            //I probably don't necessarily need this level of detail since it's unlikely the third case will be activated but we can always remove it
-            if (handPoint_X > wristPoint_X)
-            {
-                wristAngle = 180 - Math.Round(Math.Atan2(Math.Abs(wristPoint_Y - handPoint_Y), Math.Abs(wristPoint_X - handPoint_X)) * 180 / Math.PI, 2);
-
-            }
-            else if (handPoint_X == wristPoint_X)
-            {
-                wristAngle = 90;
-            }
-            else if (handPoint_X < wristPoint_X)
-            {
-                wristAngle = Math.Round(Math.Atan2(Math.Abs(wristPoint_Y - handPoint_Y), Math.Abs(wristPoint_X - handPoint_X)) * 180 / Math.PI, 2);
-            }
-
             double forearmAngle = 0;
-            //I probably don't necessarily need this level of detail since it's unlikely the third case will be activated but we can always remove it
-            if (wristPoint_X > elbowPoint_X)
-            {
-                forearmAngle = 180 - Math.Round(Math.Atan2(Math.Abs(elbowPoint_Y - wristPoint_Y), Math.Abs(elbowPoint_X - wristPoint_X)) * 180 / Math.PI, 2);
-
-            }
-            else if (wristPoint_X == elbowPoint_X)
-            {
-                forearmAngle = 90;
-            }
-            else if (wristPoint_X < elbowPoint_X)
-            {
-                forearmAngle = Math.Round(Math.Atan2(Math.Abs(elbowPoint_Y - wristPoint_Y), Math.Abs(elbowPoint_X - wristPoint_X)) * 180 / Math.PI, 2);
-            }
-
-
             double elbowAngle = 0;
-            if (elbowPoint_X > shoulderPoint_X)
+            if (leftArmChecked)
             {
-                elbowAngle = 180 - Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
-            }
-            else if (elbowPoint_X == shoulderPoint_X)
-            {
-                elbowAngle = 90;
-            }
-            else if (elbowPoint_X < shoulderPoint_X)
-            {
-                elbowAngle = Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+                //I probably don't necessarily need this level of detail since it's unlikely the third case will be activated but we can always remove it
+                if (handPoint_X < wristPoint_X)
+                {
+                    wristAngle = 180 - Math.Round(Math.Atan2(Math.Abs(wristPoint_Y - handPoint_Y), Math.Abs(wristPoint_X - handPoint_X)) * 180 / Math.PI, 2);
 
+                }
+                else if (handPoint_X == wristPoint_X)
+                {
+                    wristAngle = 90;
+                }
+                else if (handPoint_X > wristPoint_X)
+                {
+                    wristAngle = Math.Round(Math.Atan2(Math.Abs(wristPoint_Y - handPoint_Y), Math.Abs(wristPoint_X - handPoint_X)) * 180 / Math.PI, 2);
+                }
+
+
+                //I probably don't necessarily need this level of detail since it's unlikely the third case will be activated but we can always remove it
+                if (wristPoint_X < elbowPoint_X)
+                {
+                    forearmAngle = 180 - Math.Round(Math.Atan2(Math.Abs(elbowPoint_Y - wristPoint_Y), Math.Abs(elbowPoint_X - wristPoint_X)) * 180 / Math.PI, 2);
+
+                }
+                else if (wristPoint_X == elbowPoint_X)
+                {
+                    forearmAngle = 90;
+                }
+                else if (wristPoint_X > elbowPoint_X)
+                {
+                    forearmAngle = Math.Round(Math.Atan2(Math.Abs(elbowPoint_Y - wristPoint_Y), Math.Abs(elbowPoint_X - wristPoint_X)) * 180 / Math.PI, 2);
+                }
+
+
+
+                if (elbowPoint_X < shoulderPoint_X)
+                {
+                    elbowAngle = 180 - Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+                }
+                else if (elbowPoint_X == shoulderPoint_X)
+                {
+                    elbowAngle = 90;
+                }
+                else if (elbowPoint_X > shoulderPoint_X)
+                {
+                    elbowAngle = Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+
+                }
             }
+            else
+            {
+                //I probably don't necessarily need this level of detail since it's unlikely the third case will be activated but we can always remove it
+                if (handPoint_X > wristPoint_X)
+                {
+                    wristAngle = 180 - Math.Round(Math.Atan2(Math.Abs(wristPoint_Y - handPoint_Y), Math.Abs(wristPoint_X - handPoint_X)) * 180 / Math.PI, 2);
+
+                }
+                else if (handPoint_X == wristPoint_X)
+                {
+                    wristAngle = 90;
+                }
+                else if (handPoint_X < wristPoint_X)
+                {
+                    wristAngle = Math.Round(Math.Atan2(Math.Abs(wristPoint_Y - handPoint_Y), Math.Abs(wristPoint_X - handPoint_X)) * 180 / Math.PI, 2);
+                }
+
+                
+                //I probably don't necessarily need this level of detail since it's unlikely the third case will be activated but we can always remove it
+                if (wristPoint_X > elbowPoint_X)
+                {
+                    forearmAngle = 180 - Math.Round(Math.Atan2(Math.Abs(elbowPoint_Y - wristPoint_Y), Math.Abs(elbowPoint_X - wristPoint_X)) * 180 / Math.PI, 2);
+
+                }
+                else if (wristPoint_X == elbowPoint_X)
+                {
+                    forearmAngle = 90;
+                }
+                else if (wristPoint_X < elbowPoint_X)
+                {
+                    forearmAngle = Math.Round(Math.Atan2(Math.Abs(elbowPoint_Y - wristPoint_Y), Math.Abs(elbowPoint_X - wristPoint_X)) * 180 / Math.PI, 2);
+                }
+
+
+                
+                if (elbowPoint_X > shoulderPoint_X)
+                {
+                    elbowAngle = 180 - Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+                }
+                else if (elbowPoint_X == shoulderPoint_X)
+                {
+                    elbowAngle = 90;
+                }
+                else if (elbowPoint_X < shoulderPoint_X)
+                {
+                    elbowAngle = Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+
+                }
+            }
+            
             double[] temp = { forearmAngle, elbowAngle, wristAngle };
             return temp;
 
