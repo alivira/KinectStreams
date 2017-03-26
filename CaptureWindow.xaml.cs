@@ -90,12 +90,13 @@ namespace KinectStreams
             increment = increment + posture;
             RestTimer.Text = increment.ToString();
 
-            if(increment >= 15)
+            if(increment >= 60)
             {
                 sendToServerRest = true;
             }
 
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
+             var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
+            httpWebRequest.Proxy = null;
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
@@ -177,6 +178,25 @@ namespace KinectStreams
             {
                 if (frame != null)
                 {
+                    /*var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://rocky-citadel-35459.herokuapp.com/sendData");
+                    httpWebRequest.Proxy = null;
+                    httpWebRequest.ContentType = "application/json";
+                    httpWebRequest.Method = "POST";
+
+                    using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                    {
+                        string json = "{\"data\":" + sendToServer + "}";
+
+                        streamWriter.Write(json);
+                        streamWriter.Flush();
+                        streamWriter.Close();
+                    }
+
+                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+                    }*/
 
                     canvas.Children.Clear();
 
@@ -193,19 +213,35 @@ namespace KinectStreams
                                 // Draw skeleton.
                                 if (_displayBody)
                                 {
-                                    double[] theta = new double[3] { 0, 0, 0 };
+                                    double[] theta = { };
+
                                     if (btnLeftArm.IsChecked == true)
                                     {
                                         canvas.DrawIdeal(true, 0.7754, 0.6845, 0.9854, Global.upperarmLength, Global.forearmLength, Global.handLength, body);
                                         theta = canvas.DrawSkeleton(body, true);
-                                        txtUpperToForearmTheta.Text = "Theta: " + theta[1];
+
+                                        if(theta != null)
+                                        {
+                                            txtForearmTheta.Text = "Forearm: " + theta[0];
+                                            txtElbowTheta.Text = "Elbow: " + theta[1];
+                                            txtWristTheta.Text = "Wrist: " + theta[2];                                        
+                                        }
+                                        //canvas.DrawIdeal(true, 0.7754, 0.6845, 0.9854, 0.32, 0.25, 0.18, body);
                                     }
                                     else
                                     {
                                         canvas.DrawIdeal(false, 0.7754, 0.6845, 0.9854, Global.upperarmLength, Global.forearmLength, Global.handLength, body);
                                         theta = canvas.DrawSkeleton(body, false);
-                                        txtUpperToForearmTheta.Text = "Theta: " + theta[1];
+
+                                        if (theta != null)
+                                        {
+                                            txtForearmTheta.Text = "Forearm: " + theta[0];
+                                            txtElbowTheta.Text = "Elbow: " + theta[1];
+                                            txtWristTheta.Text = "Wrist: " + theta[2];
+                                        }
                                     }
+
+
 
                                     //Evaluate angle of the wrist
                                     if ((theta[0] >= idealThetaA - 5) && (theta[0] <= idealThetaA + 5))

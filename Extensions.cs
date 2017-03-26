@@ -187,11 +187,11 @@ namespace KinectStreams
                 }
                 canvas.DrawPoint(joint, Colors.LightBlue, 20);
             }
-            /*
-            canvas.DrawLine(body.Joints[JointType.Head], body.Joints[JointType.Neck]);
-            canvas.DrawLine(body.Joints[JointType.Neck], body.Joints[JointType.SpineShoulder]);
-            canvas.DrawLine(body.Joints[JointType.SpineShoulder], body.Joints[JointType.SpineMid]);
-            */
+
+            //canvas.DrawLine(body.Joints[JointType.Head], body.Joints[JointType.Neck]);
+            //canvas.DrawLine(body.Joints[JointType.Neck], body.Joints[JointType.SpineShoulder]);
+            //canvas.DrawLine(body.Joints[JointType.SpineShoulder], body.Joints[JointType.SpineMid]);
+
             Joint shoulder = new Joint();
             Joint elbow = new Joint();
             Joint wrist = new Joint();
@@ -213,7 +213,8 @@ namespace KinectStreams
             }
             else
             {
-                //canvas.DrawLine(body.Joints[JointType.SpineShoulder], body.Joints[JointType.ShoulderRight]);
+               // canvas.DrawLine(body.Joints[JointType.SpineShoulder], body.Joints[JointType.ShoulderRight]);
+
                 canvas.DrawLine(body.Joints[JointType.ShoulderRight], body.Joints[JointType.ElbowRight]);
                 canvas.DrawLine(body.Joints[JointType.ElbowRight], body.Joints[JointType.WristRight]);
                 canvas.DrawLine(body.Joints[JointType.WristRight], body.Joints[JointType.HandRight]);
@@ -274,19 +275,22 @@ namespace KinectStreams
                 forearmAngle = Math.Round(Math.Atan2(Math.Abs(elbowPoint_Y - wristPoint_Y), Math.Abs(elbowPoint_X - wristPoint_X)) * 180 / Math.PI, 2);
             }
 
-            double[] temp = new double[3] { 0, 0, 0 };
+
+            double elbowAngle = 0;
             if (elbowPoint_X > shoulderPoint_X)
             {
-                temp[2] = 180 - Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+                elbowAngle = 180 - Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
             }
             else if (elbowPoint_X == shoulderPoint_X)
             {
-                temp[2] = 90;
+                elbowAngle = 90;
             }
             else if (elbowPoint_X < shoulderPoint_X)
             {
-                temp[2] = Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+                elbowAngle = Math.Round(Math.Atan2(Math.Abs(shoulderPoint_Y - elbowPoint_Y), Math.Abs(shoulderPoint_X - elbowPoint_X)) * 180 / Math.PI, 2);
+
             }
+            double[] temp = { forearmAngle, elbowAngle, wristAngle };
             return temp;
 
             //x`return Math.Round(((Math.Acos((lengthShoulderToElbow + lengthElbowToWrist - lengthShoulderToWrist) / (2 * Math.Sqrt(lengthShoulderToElbow) * Math.Sqrt(lengthElbowToWrist)))) * 180 / Math.PI),2);
