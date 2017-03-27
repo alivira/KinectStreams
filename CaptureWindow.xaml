@@ -14,9 +14,9 @@
             </StackPanel>
             <RadioButton x:Name="btnLeftArm" Content="Left Arm" HorizontalAlignment="Left" Margin="1216,22,0,0" VerticalAlignment="Top" Checked="btnLeftArm_Checked"/>
             <RadioButton x:Name="btnRightArm" Content="Right Arm" HorizontalAlignment="Left" Margin="1309,22,0,0" VerticalAlignment="Top" Checked="btnRightArm_Checked"/>
-            <TextBox x:Name="txtElbowTheta" HorizontalAlignment="Left" Height="23" Margin="513,16,0,0" TextWrapping="Wrap" Text="Theta" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
-            <TextBox x:Name="txtForearmTheta" HorizontalAlignment="Left" Height="23" Margin="388,16,0,0" TextWrapping="Wrap" Text="Theta" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
-            <TextBox x:Name="txtWristTheta" HorizontalAlignment="Left" Height="23" Margin="638,16,0,0" TextWrapping="Wrap" Text="Theta" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
+            <TextBox x:Name="txtElbowTheta" HorizontalAlignment="Left" Height="23" Margin="453,16,0,0" TextWrapping="Wrap" Text="Theta" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
+            <TextBox x:Name="txtForearmTheta" HorizontalAlignment="Left" Height="23" Margin="328,16,0,0" TextWrapping="Wrap" Text="Theta" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
+            <TextBox x:Name="txtWristTheta" HorizontalAlignment="Left" Height="23" Margin="578,16,0,0" TextWrapping="Wrap" Text="Theta" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
             <TextBox x:Name="RestTimer" HorizontalAlignment="Left" Height="23" Margin="83,16,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         </Grid>
     </Grid>
