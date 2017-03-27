@@ -57,15 +57,20 @@ namespace KinectStreams
             thetaA = frmOpt.handLength.ToString();
             thetaB = frmOpt.upperarmLength.ToString();
             thetaC = frmOpt.forearmLength.ToString();
-            if (thetaA.Equals("0") || thetaB.Equals("0") || thetaC.Equals("0"))
-            {
-                MessageBox.Show("Please input the user angles.", "Error", MessageBoxButton.OK);
+            if (thetaA.Equals("0")) {
+                thetaA = "44.4";
             }
-            else
+            if (thetaB.Equals("0"))
             {
-                cptWindow = new CaptureWindow(thetaA, thetaB, thetaC);
-                cptWindow.Show();
+                thetaB = "39.2";
             }
+            if(thetaC.Equals("0"))
+            {
+                thetaC = "56.5";
+            }
+
+            cptWindow = new CaptureWindow(thetaA, thetaB, thetaC);
+            cptWindow.Show();
             
         }
 
