@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KinectStreams"
         mc:Ignorable="d"
-        Title="History" Height="365.934" Width="928.022">
+        Title="History" Height="365.934" Width="928.022" Loaded="Window_Loaded">
     <Grid>
         <MediaElement x:Name="mediaplayer" HorizontalAlignment="Left" Height="263" VerticalAlignment="Top" Width="448" Margin="447,31,0,0"/>
         <ListBox x:Name="listVideo" HorizontalAlignment="Left" Height="263" Margin="18,31,0,0" VerticalAlignment="Top" Width="198"/>
