@@ -5,6 +5,6 @@
     <Grid>
         <Button x:Name="btnInput" Content="Input User Data" HorizontalAlignment="Left" VerticalAlignment="Top" Width="130" Height="37" Margin="178,114,0,0" Click="btnInput_Click"/>
         <Button x:Name="btnCapture" Content="Enter Capture Mode" HorizontalAlignment="Left" VerticalAlignment="Top" Width="130" Height="37" Margin="178,182,0,0" Click="btnCapture_Click"/>
-        <Button x:Name="btnHistory" Content="History" HorizontalAlignment="Left" VerticalAlignment="Top" Width="130" Height="37" Margin="178,248,0,0"/>
+        <Button x:Name="btnHistory" Content="History" HorizontalAlignment="Left" VerticalAlignment="Top" Width="130" Height="37" Margin="178,248,0,0" Click="btnHistory_Click"/>
     </Grid>
 </Window>
