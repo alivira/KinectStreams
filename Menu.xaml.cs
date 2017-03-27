@@ -21,13 +21,15 @@ namespace KinectStreams
         public OptimizationAngleMenu frmOpt = new OptimizationAngleMenu();
         public CaptureWindow cptWindow;
         public History hstWindow;
-        string thetaA = "";
-        string thetaB = "";
-        string thetaC = "";
+        string thetaA = "44.4";
+        string thetaB = "39.2";
+        string thetaC = "56.5";
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            frmOpt.txtHandLength.Text = thetaA;
+            frmOpt.txtUpperLength.Text = thetaB;
+            frmOpt.txtForeArmLength.Text = thetaC;
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -43,6 +45,9 @@ namespace KinectStreams
             catch
             {
                 frmOpt = new OptimizationAngleMenu();
+                frmOpt.txtHandLength.Text = thetaA;
+                frmOpt.txtUpperLength.Text = thetaB;
+                frmOpt.txtForeArmLength.Text = thetaC;
                 frmOpt.Show();
             }
         }
