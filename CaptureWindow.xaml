@@ -10,6 +10,7 @@
                 <Button x:Name="btnColorCam" Content="Color" Style="{StaticResource ButtonStyle}" Click="Color_Click" />
                 <Button x:Name="btnStart" Content="Start" Style="{StaticResource ButtonStyle}" Click="Start_Click" />
                 <Button x:Name="btnStop" Content="Stop" Style="{StaticResource ButtonStyle}" Click="Stop_Click" />
+                <Button x:Name="btnMenu" Content="Back to Menu" Style="{StaticResource ButtonStyle}" Click="Menu_Click" />
             </StackPanel>
             <RadioButton x:Name="btnLeftArm" Content="Left Arm" HorizontalAlignment="Left" Margin="1216,22,0,0" VerticalAlignment="Top" Checked="btnLeftArm_Checked"/>
             <RadioButton x:Name="btnRightArm" Content="Right Arm" HorizontalAlignment="Left" Margin="1309,22,0,0" VerticalAlignment="Top" Checked="btnRightArm_Checked"/>

@@ -16,10 +16,14 @@ using System.Windows.Shapes;
 
 namespace KinectStreams
 {
-    public partial class Menu: Window
+    public partial class Menu : Window
     {
         public OptimizationAngleMenu frmOpt = new OptimizationAngleMenu();
-        public CaptureWindow cptWindow = new CaptureWindow();
+        public CaptureWindow cptWindow;
+        public History hstWindow;
+        string thetaA = "";
+        string thetaB = "";
+        string thetaC = "";
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -31,14 +35,39 @@ namespace KinectStreams
         }
 
         private void btnInput_Click(object sender, RoutedEventArgs e)
-        { 
-            frmOpt.Show();
-            
+        {
+            try
+            {
+                frmOpt.Show();
+            }
+            catch
+            {
+                frmOpt = new OptimizationAngleMenu();
+                frmOpt.Show();
+            }
         }
 
         private void btnCapture_Click(object sender, RoutedEventArgs e)
         {
-            cptWindow.Show();
+            thetaA = frmOpt.handLength.ToString();
+            thetaB = frmOpt.upperarmLength.ToString();
+            thetaC = frmOpt.forearmLength.ToString();
+            if (thetaA.Equals("0") || thetaB.Equals("0") || thetaC.Equals("0"))
+            {
+                MessageBox.Show("Please input the user angles.", "Error", MessageBoxButton.OK);
+            }
+            else
+            {
+                cptWindow = new CaptureWindow(thetaA, thetaB, thetaC);
+                cptWindow.Show();
+            }
+            
+        }
+
+        private void btnHistory_Click(object sender, RoutedEventArgs e)
+        {
+            hstWindow = new History();
+            hstWindow.Show();
         }
     }
 }

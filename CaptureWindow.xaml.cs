@@ -37,18 +37,21 @@ namespace KinectStreams
 
         #endregion
 
+        private static double idealThetaA;
+        private static double idealThetaB;
+        private static double idealThetaC;
+
         #region Constructor
 
-        public CaptureWindow()
+        public CaptureWindow(string thetaA, string thetaB, string thetaC)
         {
             InitializeComponent();
+            idealThetaA = Convert.ToDouble(thetaA);
+            idealThetaB = Convert.ToDouble(thetaB);
+            idealThetaC = Convert.ToDouble(thetaC);
         }
 
         #endregion
-
-        private static double idealThetaA = 44.43;
-        private static double idealThetaB = 39.22;
-        private static double idealThetaC = 56.46;
 
         private bool sendToServerElbow = false;
         private bool sendToServerWrist = false;
@@ -361,6 +364,11 @@ namespace KinectStreams
             dt.Stop();
             btnStop.IsEnabled = false;
             btnStart.IsEnabled = true;
+        }
+
+        private void Menu_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
         }
     }
 
