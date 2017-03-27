@@ -4,11 +4,12 @@
         Title="Kinect | User Profile" Height="233" Width="317" Loaded="Window_Loaded" Closed="Window_Closed" WindowStartupLocation="CenterScreen">
     <Grid>
         <TextBox x:Name="txtHandLength" HorizontalAlignment="Left" Height="23" Margin="163,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" TextChanged="txtHandLength_TextChanged"/>
-        <Label Content="Hand Length (m):" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" Width="133" Margin="10,35,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label Content="Hand:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" Width="133" Margin="10,35,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         <TextBox x:Name="txtForeArmLength" HorizontalAlignment="Left" Height="23" Margin="163,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" TextChanged="txtForeArmLength_TextChanged"/>
-        <Label Content="Forearm Length (m):" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" Width="133" Margin="10,76,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label Content="Wrist:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" Width="133" Margin="10,76,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         <TextBox x:Name="txtUpperLength" HorizontalAlignment="Left" Height="23" Margin="163,121,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" TextChanged="txtUpperLength_TextChanged"/>
-        <Label Content="Upperarm Length (m):" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" Width="133" Margin="10,117,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label Content="Elbow:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" Width="133" Margin="10,117,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         <Button x:Name="btnSaveUser" Content="Save" HorizontalAlignment="Left" Margin="117,161,0,0" VerticalAlignment="Top" Width="75" Click="btnSaveUser_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="22,10,0,0" TextWrapping="Wrap" Text="Input the angles from the horizontal for each limb" VerticalAlignment="Top"/>
     </Grid>
 </Window>
