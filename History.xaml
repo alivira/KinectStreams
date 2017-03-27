@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KinectStreams"
         mc:Ignorable="d"
-        Title="History" Height="365.934" Width="928.022" Loaded="Window_Loaded">
+        Title="History" Height="378.297" Width="989.835" Loaded="Window_Loaded">
     <Grid>
-        <MediaElement x:Name="mediaplayer" HorizontalAlignment="Left" Height="263" VerticalAlignment="Top" Width="448" Margin="447,31,0,0"/>
-        <ListBox x:Name="listVideo" HorizontalAlignment="Left" Height="263" Margin="18,31,0,0" VerticalAlignment="Top" Width="198"/>
-        <Button x:Name="btnMenu" Content="Back to Menu" HorizontalAlignment="Left" VerticalAlignment="Top" Width="101" Margin="18,5,0,0"/>
-        <TextBlock x:Name="txtTip" HorizontalAlignment="Left" Margin="229,31,0,0" TextWrapping="Wrap" Text="No video selected" VerticalAlignment="Top" Height="263" Width="200"/>
-        <Button x:Name="btnPlay" Content="Back to Menu" HorizontalAlignment="Left" VerticalAlignment="Top" Width="101" Margin="622,305,0,0"/>
+        <MediaElement x:Name="mediaplayer" HorizontalAlignment="Left" Height="263" VerticalAlignment="Top" Width="448" Margin="503,29,0,0"/>
+        <ListBox x:Name="listVideo" HorizontalAlignment="Left" Height="263" Margin="18,31,0,0" VerticalAlignment="Top" Width="246"/>
+        <Button x:Name="btnMenu" Content="Back to Menu" HorizontalAlignment="Left" VerticalAlignment="Top" Width="101" Margin="18,5,0,0" Click="btnMenu_Click"/>
+        <TextBlock x:Name="txtTip" HorizontalAlignment="Left" Margin="287,31,0,0" TextWrapping="Wrap" Text="No video selected" VerticalAlignment="Top" Height="263" Width="200"/>
+        <Button x:Name="btnPlay" Content="Play" HorizontalAlignment="Left" VerticalAlignment="Top" Width="101" Margin="678,303,0,0" Click="btnPlay_Click"/>
 
     </Grid>
 </Window>
