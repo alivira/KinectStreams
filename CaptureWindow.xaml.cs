@@ -319,7 +319,7 @@ namespace KinectStreams
                 capturer = new Capturer();                
                 string name = string.Format("{0}{1}EntireScreenCapture-{2:yyyy-MM-dd_hh-mm-ss-tt}.wmv", Environment.CurrentDirectory, 
                     System.IO.Path.DirectorySeparatorChar, DateTime.Now);
-                
+                capturer.ShowMouseHotSpot = false;
                 capturer.OutputFileName = name; // set output video filename to .WVM or .AVI filename
                 capturer.CapturingType = CaptureAreaType.catScreen; // set capturing area type to catScreen to capture whole screen
                 capturer.OutputWidth = Convert.ToInt32(this.Width);
